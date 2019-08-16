@@ -90,3 +90,84 @@ function treeHeight(t) {
         return 1 + treeHeight(t.left);
     }
 }
+
+//Is it a BST?
+//write an algo to check whether an arbittrary binary tree is BST assuming tree has no duplicates
+
+function isItBST(t) {
+    if (t.right === null && t.left === null) {
+        return true;
+    }
+
+    if (t.left !== null && t.right === null) {
+        return isItBST(t.left);
+    }
+    if (t.right !== null && t.left === null) {
+        return isItBST(t.right);
+
+    }
+
+    if (t.left !== null && t.right !== null) {
+        //left less than right
+        if (t.left.value < t.right.value) {
+            return isItBST(t.left) && isItBST(t.right);
+        } else {
+            //false
+            return false;
+        }
+    }
+}
+
+//third largest node
+//write an algo to find the third largest node in a binary search tree
+function thirdLargestNode(t, num = []) {
+
+    if (!t.left && !t.right) {
+        num.push(t.value);
+
+        const sorted = sortArray(num);
+        //less than 3
+        return sorted[2] ? sorted[2] : 'The tree has less than 3 nodes.';
+    }
+    if (t.left !== null && t.right === null) {
+        num.push(t.value);
+
+        return thirdLargest(t.left, num);
+    }
+    //right not null, left null
+    if (t.right !== null && t.left === null) {
+        num.push(t.value);
+
+        return thirdLargest(t.right, num);
+    }
+    //right and left aren't null
+    if (t.right !== null && t.left !== null) {
+        num.push(t.value);
+        return thirdLargest(t.right, num);
+    }
+
+}
+
+//Balanced BST
+//write an algo that checks if a BST is balance (tree where no 2 leaves differ in distance from the root by more than 1)
+
+function balanceBST(t) {
+    //t is null
+    if (t === null) {
+        return true;
+    }
+
+
+    let rightSide = helperHeight(t.right);
+    let leftSide = helperHeight(t.left);
+
+    //Math.abs returns absolute value
+    const diff = Math.abs(rightSide - leftSide)
+    if (diff > 1) {
+        return false;
+    }
+    else {
+        //left and right
+        return balanceBST(t.left) && balanceBST(t.right);
+    }
+}
